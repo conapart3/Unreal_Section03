@@ -15,3 +15,6 @@ Content/StarterContent/*
 *.suo
 *.VC.opendb
 *.sln
+Binaries/
+Intermediate/
+Saved/
