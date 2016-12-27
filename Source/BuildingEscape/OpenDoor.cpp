@@ -19,6 +19,11 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Find the player controller
+	// Player controller will exist after play has begun
+	// Pawn is an actor therefore use getPawn method.
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 
@@ -28,13 +33,10 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
 	// Poll the trigger volume every frame
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens))
+	if (PressurePlate->IsOverlappingActor(ActorThatOpens))// if the ActorThatOpens is in the volume
 	{
-		OpenDoor();
+		OpenDoor();// open the door
 	}
-
-	// if the ActorThatOpens is in the volume
-		// open the door
 }
 
 void UOpenDoor::OpenDoor()
