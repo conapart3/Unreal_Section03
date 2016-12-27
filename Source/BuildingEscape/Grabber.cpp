@@ -40,6 +40,8 @@ void UGrabber::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Input component found."));
 		/// Bind the input action
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		/// we still bind the action on "Grab" as this is still the ActionName.
+		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("%s missing Input component."), *GetOwner()->GetName());
@@ -104,4 +106,9 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grabbing!"));
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Releasing!"));
 }
