@@ -26,6 +26,10 @@ private:
 	// How far ahead the player can reach in cm.
 	float Reach = 100.f;
 		
-	// Set to null as...
+	// Set to null as these components may not be initialised and we validate they aren't nullptr
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputComponent = nullptr;
+
+	// Ray-case and grab what is in reach.
+	void Grab();
 };
