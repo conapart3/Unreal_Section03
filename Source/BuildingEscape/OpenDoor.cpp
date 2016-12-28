@@ -29,9 +29,8 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	float TotalMass = GetTotalMassOfActorsOnPlate();
 	// Poll the trigger volume every frame
-	if (TotalMass > 30.f)// todo make into a parameter editanywhere for testing
+	if (GetTotalMassOfActorsOnPlate() > 30.f)// todo make into a parameter editanywhere for testing
 	{
 		OpenDoor();// open the door
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
