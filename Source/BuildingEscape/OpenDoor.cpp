@@ -3,6 +3,7 @@
 #include "BuildingEscape.h"
 #include "OpenDoor.h"
 
+#define OUT
 
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -19,13 +20,7 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Find the owning component
 	Owner = GetOwner();
-	// Find the player controller
-	// Player controller will exist after play has begun
-	// Pawn is an actor therefore use getPawn method.
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 
@@ -34,8 +29,9 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
+	float TotalMass = GetTotalMassOfActorsOnPlate();
 	// Poll the trigger volume every frame
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens))// if the ActorThatOpens is in the volume
+	if (TotalMass > 30.f)// todo make into a parameter editanywhere for testing
 	{
 		OpenDoor();// open the door
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
@@ -56,4 +52,22 @@ void UOpenDoor::OpenDoor()
 void UOpenDoor::CloseDoor()
 {
 	Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
+}
+
+float UOpenDoor::GetTotalMassOfActorsOnPlate()
+{
+	float TotalMass = 0.f;
+
+	TArray<AActor*> OverlappingActors;
+
+	// Find all the overlapping actors
+	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+
+	// Iterate through them adding their masses. (use const as the iterator doesn't change we just receive it).
+	for (const auto& Iterator : OverlappingActors)
+	{
+		TotalMass = TotalMass + Iterator->GetRootPrimitiveComponent()->GetMass();
+	}
+
+	return TotalMass;
 }
